@@ -1,0 +1,22 @@
+{% extends 'employees\employee_base.html' %}
+
+{% block title %} Employee Index {% endblock %}
+
+{% block header %} Employee Index {% endblock %}
+
+{% block content %}
+  {% if user.is_authenticated %}
+    Hello Employee {{ user.username }}! <br />
+
+    <h2> Today's Customers </h2>
+    <ul>
+      <li><h3>{{ todays_customers }}</h3></li>
+      <li></li>
+    </ul>
+
+  {% else %}
+    <p>You are at the employee index, but you are not logged in.</p>
+    <a href="{% url 'login' %}">Log In</a>
+    <a href="{% url 'accounts:register' %}">Sign Up</a>
+  {% endif %}
+{% endblock %}
