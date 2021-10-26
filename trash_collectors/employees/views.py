@@ -6,20 +6,16 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from datetime import date
 from .models import Employee
+from customers.models import Customer
 
 # Create your views here.
 
 # TODO: Create a function for each path created in employees/urls.py. Each will need a template as well.
 
 @login_required
-def index(request, customers_id):
+def index(request):
     logged_in_user = request.user
     # This line will get the Customer model from the other app, it can now be used to query the db for Customers
-    # Customer = apps.get_model('customers.Customer')
-    # all_customers = Customer.objects.all(pk=customers_id)
-    # context = {
-    #     'all_customers': all_customers
-    # }
  
     try:
         # This line will return the customer record of the logged-in user if one exists
@@ -29,11 +25,35 @@ def index(request, customers_id):
         
         context = {
             'logged_in_employee': logged_in_employee,
-            'today': today
+            'today': today,
         }
+        
         return render(request, 'employees/index.html', context)
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('employees:create'))
+
+@login_required
+def employee_index(request):
+    logged_in_user = request.user
+    logged_in_employee = Employee.objects.get(user=logged_in_user)
+    customer = apps.get_model('customers.Customer')
+    all_customers = Customer.objects.all()
+    today = date.today()
+    weekday = today.strftime('%A')
+    todays_customers = []
+    context = {
+            'logged_in_employee': logged_in_employee,
+            'today': today,
+            'todays_customers': todays_customers
+        }
+    if request.method == "POST":
+        for customer in all_customers:
+            if customer.zip_code == logged_in_employee.zip_code and customer.pickup_day == weekday and customer.suspend_start == False or customer.onetime_pickup == weekday:
+                todays_customers.append(customer)
+        return render(request, 'employees/employee_index.html', context)
+    else:
+        return HttpResponseRedirect(reverse('employees:index'))
+
 
 @login_required
 def create(request):

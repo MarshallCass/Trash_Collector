@@ -1,18 +1,18 @@
 {% extends 'employees\employee_base.html' %}
 
-{% block title %} Employee Home {% endblock %}
+{% block title %} Employee Index {% endblock %}
 
-{% block header %} Employee Portal {% endblock %}
+{% block header %} Employee Index {% endblock %}
 
 {% block content %}
   {% if user.is_authenticated %}
     Hello Employee {{ user.username }}! <br />
 
     <h2> Today's Customers </h2>
-    <a href="{% url 'employees:employee_index' %}" class="btn btn-primary btn-sm active">Click for Index</a>
-    
-  
-
+    <ul>
+      <li><h3>{{ todays_customers }}</h3></li>
+      <li></li>
+    </ul>
 
   {% else %}
     <p>You are at the employee index, but you are not logged in.</p>
