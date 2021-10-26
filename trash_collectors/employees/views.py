@@ -12,10 +12,15 @@ from .models import Employee
 # TODO: Create a function for each path created in employees/urls.py. Each will need a template as well.
 
 @login_required
-def index(request):
+def index(request, customers_id):
     logged_in_user = request.user
     # This line will get the Customer model from the other app, it can now be used to query the db for Customers
     # Customer = apps.get_model('customers.Customer')
+    # all_customers = Customer.objects.all(pk=customers_id)
+    # context = {
+    #     'all_customers': all_customers
+    # }
+ 
     try:
         # This line will return the customer record of the logged-in user if one exists
         logged_in_employee = Employee.objects.get(user=logged_in_user)
@@ -29,7 +34,6 @@ def index(request):
         return render(request, 'employees/index.html', context)
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('employees:create'))
-    
 
 @login_required
 def create(request):
