@@ -1,6 +1,8 @@
-{% extends 'base.html' %}
+{% extends 'employees\employee_base.html' %}
 
-{% block title %}{% block header %} Employee Home {% endblock %}{% endblock %}
+{% block title %} Employee Home {% endblock %}
+
+{% block header %} Employee Portal {% endblock %}
 
 {% block content %}
   {% if user.is_authenticated %}
