@@ -21,10 +21,14 @@ def index(request):
         logged_in_employee = Employee.objects.get(user=logged_in_user)
 
         today = date.today()
+        logged_in_employee_zip_code = logged_in_employee.zip_code
+        Customer = apps.get_model('customers.Customer')
+        customer_in_zip = Customer.objects.filter(zip_code=logged_in_employee_zip_code)
         
         context = {
             'logged_in_employee': logged_in_employee,
-            'today': today
+            'today': today,
+            'customer_in_zip': customer_in_zip
         }
         return render(request, 'employees/index.html', context)
     except ObjectDoesNotExist:
@@ -63,3 +67,13 @@ def edit_profile(request):
             'logged_in_employee': logged_in_employee
         }
         return render(request, 'employees/edit_profile.html', context)
+
+@login_required
+def confirm_pickup(request, customer_id):
+    
+        Customer = apps.get_model('customers.Customer')
+        customer_pickup = Customer.objects.get(id = customer_id)
+        customer_pickup.balance += 20
+        customer_pickup.save()
+    
+        return HttpResponseRedirect(reverse('employees:index'))        

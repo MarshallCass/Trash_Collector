@@ -5,9 +5,22 @@
 {% block header %} Employee Portal {% endblock %}
 
 {% block content %}
-  {% if user.is_authenticated %}
-    Hello Employee {{ user.username }}!
-  {% else %}
+{% if user.is_authenticated %}
+Hello {{ logged_in_employee.name }}<br />       
+        
+  {% for customer in customer_in_zip %}
+    <hr>
+    Customer Name: {{ customer.name }}<br />
+    Customer Address: {{ customer.address }}<br />
+    Customer ZipCode: {{ customer.zip_code }}<br />
+
+        
+    <button><a href="{% url 'employees:confirm_pickup' customer.id %}">Confirm Trash Pickup</a></button><br />
+        
+
+  {% endfor %}  
+
+{% else %}
     <p>You are at the employee index, but you are not logged in.</p>
     <a href="{% url 'login' %}">Log In</a>
     <a href="{% url 'accounts:register' %}">Sign Up</a>
