@@ -4,6 +4,7 @@ from django.apps import apps
 from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from datetime import date
 from .models import Employee
 from customers.models import Customer
@@ -41,23 +42,21 @@ def employee_index(request):
     logged_in_user = request.user
     logged_in_employee = Employee.objects.get(user=logged_in_user)
     customer = apps.get_model('customers.Customer')
-    all_customers = Customer.objects.all()
+    logged_in_employee_zip_code = logged_in_employee.zip_code
     today = date.today()
     weekday = today.strftime('%A')
-    todays_customers = []
+    todays_customer = Customer.objects.all()
+    for customer in todays_customer:   
+        todays_customer = Customer.objects.filter(zip_code=logged_in_employee_zip_code and customer.weekly_pickup == weekday and
+                                                    customer.suspend_start == False or customer.one_time_pickup == weekday)
+    
     context = {
             'logged_in_employee': logged_in_employee,
-            'today': today,
-            'todays_customers': todays_customers
+            'customer' : customer,
+            'todays_customer' : todays_customer
         }
-    if request.method == "POST":
-        for customer in all_customers:
-            if customer.zip_code == logged_in_employee.zip_code and customer.pickup_day == weekday and customer.suspend_start == False or customer.onetime_pickup == weekday:
-                todays_customers.append(customer)
-        return render(request, 'employees/employee_index.html', context)
-    else:
-        return HttpResponseRedirect(reverse('employees:index'))
-
+    return render(request, 'employees/employee_index.html', context)
+    
 
 @login_required
 def create(request):

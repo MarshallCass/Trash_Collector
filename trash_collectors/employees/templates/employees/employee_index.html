@@ -6,14 +6,16 @@
 
 {% block content %}
   {% if user.is_authenticated %}
-    Hello Employee {{ user.username }}! <br />
+    Hello {{ logged_in_employee.name }}! <br />
 
-    <h2> Today's Customers </h2>
+    <h3> Today's Customers </h3>
+    
     <ul>
-      <li><h3>{{ todays_customers }}</h3></li>
-      <li></li>
+      Customer Name: {{ customer.name }}<br />
+      Customer Address: {{ customer.address }}<br />
+      Pickup Day: {{ customer.weekly_pickup }}
     </ul>
-
+  
   {% else %}
     <p>You are at the employee index, but you are not logged in.</p>
     <a href="{% url 'login' %}">Log In</a>

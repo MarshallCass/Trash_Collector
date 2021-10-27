@@ -20,10 +20,6 @@ Hello {{ logged_in_employee.name }}<br />
 
   {% endfor %}  
 
-{% else %}
-  {% if user.is_authenticated %}
-    Hello Employee {{ user.username }}! <br />
-
     <h2> Today's Customers </h2>
     <a href="{% url 'employees:employee_index' %}" class="btn btn-primary btn-sm active">Click for Index</a>
     
