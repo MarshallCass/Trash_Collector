@@ -49,7 +49,8 @@ def employee_index(request):
     weekday = today.strftime('%A')
     todays_date = datetime.now()
         
-    todays_customer = Customer.objects.filter(Q(zip_code=logged_in_employee_zip_code) & Q(weekly_pickup=weekday) or Q(one_time_pickup=weekday)).exclude(date_of_last_pickup=todays_date)
+    todays_customer = Customer.objects.filter(Q(zip_code=logged_in_employee_zip_code) & Q(weekly_pickup=weekday)
+            or Q(one_time_pickup=weekday)).exclude(date_of_last_pickup=todays_date).exclude(suspend_start__lte=today, suspend_end__gte=today) 
     context = {
             'logged_in_employee': logged_in_employee,
             'customer' : customer,
