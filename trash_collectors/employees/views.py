@@ -45,18 +45,19 @@ def employee_index(request):
     today = date.today()
     weekday = today.strftime('%A')
     todays_customers = []
-    context = {
+
+    
+   
+    for customer in all_customers:
+        if customer.zip_code == logged_in_employee.zip_code and customer.pickup_day == weekday and customer.suspend_start == False or customer.onetime_pickup == weekday:
+            todays_customers.append(customer)
+        context = {
             'logged_in_employee': logged_in_employee,
             'today': today,
             'todays_customers': todays_customers
-        }
-    if request.method == "POST":
-        for customer in all_customers:
-            if customer.zip_code == logged_in_employee.zip_code and customer.pickup_day == weekday and customer.suspend_start == False or customer.onetime_pickup == weekday:
-                todays_customers.append(customer)
-        return render(request, 'employees/employee_index.html', context)
-    else:
-        return HttpResponseRedirect(reverse('employees:index'))
+        } 
+    return render(request, 'employees/employee_index.html', context)
+    
 
 
 @login_required
@@ -94,10 +95,13 @@ def edit_profile(request):
 
 @login_required
 def confirm_pickup(request, customer_id):
-    
+    try:
         Customer = apps.get_model('customers.Customer')
         customer_pickup = Customer.objects.get(id = customer_id)
         customer_pickup.balance += 20
         customer_pickup.save()
-    
-        return HttpResponseRedirect(reverse('employees:index'))        
+
+        return render(request, 'employees/index.html')
+    except ObjectDoesNotExist:
+        return HttpResponseRedirect(reverse('employees:index'))           
+          
