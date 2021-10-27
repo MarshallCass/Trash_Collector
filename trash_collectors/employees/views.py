@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from datetime import datetime
 from datetime import date
 from .models import Employee
 from customers.models import Customer
@@ -45,15 +46,15 @@ def employee_index(request):
     logged_in_employee_zip_code = logged_in_employee.zip_code
     today = date.today()
     weekday = today.strftime('%A')
-    todays_customer = Customer.objects.all()
-    for customer in todays_customer:   
-        todays_customer = Customer.objects.filter(zip_code=logged_in_employee_zip_code and customer.weekly_pickup == weekday and
-                                                    customer.suspend_start == False or customer.one_time_pickup == weekday)
-    
+    today_date = datetime.now().strftime("%d %B, %Y")
+    pickup = customer.date_of_last_pickup != today
+    customer = Customer.objects.all()
+    todays_customer = Customer.objects.filter(Q(zip_code=logged_in_employee_zip_code) & Q(weekly_pickup=weekday) or Q(one_time_pickup=weekday))
     context = {
             'logged_in_employee': logged_in_employee,
             'customer' : customer,
-            'todays_customer' : todays_customer
+            'todays_customer' : todays_customer,
+            'pickup' : pickup
         }
     return render(request, 'employees/employee_index.html', context)
     
@@ -98,5 +99,5 @@ def confirm_pickup(request, customer_id):
         customer_pickup = Customer.objects.get(id = customer_id)
         customer_pickup.balance += 20
         customer_pickup.save()
-    
+
         return HttpResponseRedirect(reverse('employees:index'))        

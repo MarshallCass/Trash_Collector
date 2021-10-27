@@ -11,11 +11,15 @@
     <h3> Today's Customers </h3>
     
     <ul>
+      {%for customer in todays_customer%}
+
       Customer Name: {{ customer.name }}<br />
       Customer Address: {{ customer.address }}<br />
-      Pickup Day: {{ customer.weekly_pickup }}
+      Pickup Day: {{ customer.weekly_pickup }}<br />
+      {{pickup}}<br />
+      {% endfor %}
     </ul>
-  
+    
   {% else %}
     <p>You are at the employee index, but you are not logged in.</p>
     <a href="{% url 'login' %}">Log In</a>
