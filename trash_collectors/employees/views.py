@@ -94,10 +94,13 @@ def edit_profile(request):
 
 @login_required
 def confirm_pickup(request, customer_id):
-    
+    try:
         Customer = apps.get_model('customers.Customer')
         customer_pickup = Customer.objects.get(id = customer_id)
         customer_pickup.balance += 20
         customer_pickup.save()
 
-        return HttpResponseRedirect(reverse('employees:index'))        
+        return render(request, 'employees/index.html')
+    except ObjectDoesNotExist:
+        return HttpResponseRedirect(reverse('employees:index'))           
+          
