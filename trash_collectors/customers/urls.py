@@ -1,5 +1,4 @@
 from django.urls import path
-
 from . import views
 
 app_name = "customers"
@@ -9,4 +8,7 @@ urlpatterns = [
     path('suspend/', views.suspend_service, name="suspend"),
     path('one_time/', views.one_time_pickup, name="one_time"),
     path('edit_profile/', views.edit_profile, name="edit_profile"),
+    path('confirm_payment/<int:customer_id>/', views.confirm_payment, name="confirm_payment"),
+    path('payments/', views.payments, name='payments')
 ]
+

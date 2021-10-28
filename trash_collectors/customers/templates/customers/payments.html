@@ -1,0 +1,66 @@
+{% extends 'customers\customer_base.html' %}
+
+{% block title %} Customer Payment Center {% endblock %}
+
+{% block header %} Customer Payment Center {% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+          Hello {{ logged_in_customer.name }}!<br />
+          Address: {{ logged_in_customer.address }} {{logged_in_customer.zip_code }}<br />
+          Current balance: $ {{ logged_in_customer.balance }}.00<br />
+          <br />
+    <!-- Set up a container element for the button -->
+    <div id="paypal-button-container"></div>
+
+    <!-- Include the PayPal JavaScript SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AS6lrDIZ_mYRZgmjoMY4jhbYh4CrdsU9U9x_lnP_WkE70gclJQEHdOIvaA2nrdQh1i-FlLzhHnSxJx1G&currency=USD"></script>
+
+    <script>
+        // Render the PayPal button into #paypal-button-container
+        paypal.Buttons({
+
+            style: {
+                color: 'blue',
+                shape: 'pill',
+                lebel: 'pay',
+                height: 30
+            },
+
+            // Set up the transaction
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: '20.00'
+                        }
+                    }]
+                });
+            },
+
+            // Finalize the transaction
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(orderData) {
+                    // Successful capture! For demo purposes:
+                    console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+                    var transaction = orderData.purchase_units[0].payments.captures[0];
+                    
+
+                    // Replace the above to show a success message within this page, e.g.
+                    const element = document.getElementById('paypal-button-container');
+                    element.innerHTML = '';
+                    element.innerHTML = '<h3>Thank you for your payment!</h3>';
+                    element.innerHTML =  transaction.status + ': ' + transaction.id;
+
+                });
+            }
+        }).render('#paypal-button-container');
+    </script>
+<button> <a href="{% url 'customers:confirm_payment' customer.id %}" onClick="refreshPage()">Confirm Payment</a></button><br />
+
+    {% else %}
+        <p>You are at the customer index, but you are not logged in.</p>
+        <a href="{% url 'login' %}">Log In</a>
+        <a href="{% url 'accounts:register' %}">Sign Up</a>
+    {% endif %}
+{% endblock %}
