@@ -11,7 +11,7 @@ Type in a day to show which customers you have on it.
 <form action="{% url 'employees:index' %}" method="post">
   {% csrf_token %}
   Day: <input type="text" name="day" id="day"><br />
-  <input type="submit" value="Save">
+  <input type="submit" value="Search"class="btn btn-primary">
 </form>
         
   {% for customer in customer_in_zip %}

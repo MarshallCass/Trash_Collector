@@ -111,4 +111,4 @@ def confirm_pickup(request, customer_id):
 
         return render(request, 'employees/employee_index.html')
     except ObjectDoesNotExist:
-        return HttpResponseRedirect(reverse('employees:index'))    
+        return HttpResponseRedirect(reverse('employees:employee_index'))    
