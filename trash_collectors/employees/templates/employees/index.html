@@ -6,26 +6,25 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-Hello {{ logged_in_employee.name }}<br />       
+Hello {{ logged_in_employee.name }}<br /> 
+Type in a day to show which customers you have on it.
+<form action="{% url 'employees:index' %}" method="post">
+  {% csrf_token %}
+  Day: <input type="text" name="day" id="day"><br />
+  <input type="submit" value="Save">
+</form>
         
   {% for customer in customer_in_zip %}
     <hr>
     Customer Name: {{ customer.name }}<br />
     Customer Address: {{ customer.address }}<br />
     Customer ZipCode: {{ customer.zip_code }}<br />
- 
-
+    Pickup Day: {{ customer.weekly_pickup }}<br />
+   
         
-    
-        
-
   {% endfor %}  
 
-    <h2> Today's Customers </h2>
-    <a href="{% url 'employees:employee_index' %}" class="btn btn-primary btn-sm active">Click for Index</a>
-    
   
-
 
   {% else %}
     <p>You are at the employee index, but you are not logged in.</p>
