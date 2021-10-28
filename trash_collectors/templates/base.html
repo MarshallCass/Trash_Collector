@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html style="background-color:rgba(26, 43, 99, 0.486);">
+<html>
 <head>
   <meta charset="utf-8">
   <title>{% block title %}{% endblock %}</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
 </head>
-<div style="background-color:rgba(26, 43, 99, 0.486);">
-  <body>
+  <body style="background-color: rgba(26, 43, 99, 0.486); height: 100%;">
   {% load static %}
   {% if user.is_authenticated %}
   
@@ -37,11 +36,8 @@
               <img src="{% static 'images/garbagemen.jpg'%}" alt="men" style="width: 100%;">
           </div>
           </div>
-          
         </div>
       </div>
-    </main>
-    
-  </body>
-</div>  
+    </main> 
+  </body>  
 </html>
