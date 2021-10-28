@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django import forms
 from datetime import datetime
 from datetime import date
 from .models import Employee
@@ -104,4 +105,3 @@ def confirm_pickup(request, customer_id):
         return render(request, 'employees/index.html')
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('employees:index'))           
-          

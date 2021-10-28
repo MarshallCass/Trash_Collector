@@ -23,10 +23,7 @@ Hello {{ logged_in_employee.name }}<br />
 
     <h2> Today's Customers </h2>
     <a href="{% url 'employees:employee_index' %}" class="btn btn-primary btn-sm active">Click for Index</a>
-    
-  
-
-
+   
   {% else %}
     <p>You are at the employee index, but you are not logged in.</p>
     <a href="{% url 'login' %}">Log In</a>
