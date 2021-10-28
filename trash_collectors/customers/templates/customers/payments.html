@@ -10,7 +10,7 @@
           Address: {{ logged_in_customer.address }} {{logged_in_customer.zip_code }}<br />
           Current balance: $ {{ logged_in_customer.balance }}.00<br />
           <br />
-          <button> <a href="{% url 'customers:confirm_payment' customer.id %}" onClick="refreshPage()">Click To Confirm</a></button><br />
+          <button> <a href="{% url 'customers:confirm_payment' logged_in_customer.id %}" onClick="refreshPage()">Click To Confirm</a></button><br />
 
     <!-- Set up a container element for the button -->
     <div id="paypal-button-container"></div>
