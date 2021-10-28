@@ -109,6 +109,6 @@ def confirm_pickup(request, customer_id):
         customer_pickup.date_of_last_pickup = datetime.now()
         customer_pickup.save()
 
-        return render(request, 'employees/index.html')
+        return render(request, 'employees/employee_index.html')
     except ObjectDoesNotExist:
-        return HttpResponseRedirect(reverse('employees:index'))    
+        return HttpResponseRedirect(reverse('employees:employee_index'))    
