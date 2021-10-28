@@ -12,11 +12,12 @@
     
     <ul>
       {%for customer in todays_customer%}
-
+        <hr>
       Customer Name: {{ customer.name }}<br />
       Customer Address: {{ customer.address }}<br />
       Pickup Day: {{ customer.weekly_pickup }}<br />
       {{ pickup_needed }}<br />
+      <button><a href="{% url 'employees:confirm_pickup' customer.id %}">Confirm Trash Pickup</a></button><br />
       {% endfor %}
     </ul>
     

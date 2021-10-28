@@ -25,10 +25,17 @@ def index(request):
         logged_in_employee = Employee.objects.get(user=logged_in_user)
 
         today = date.today()
+        day = None
+        if request.method == "POST":
+            day = request.POST.get('day')
+            if day == '':
+                day = None
         logged_in_employee_zip_code = logged_in_employee.zip_code
         Customer = apps.get_model('customers.Customer')
-        customer_in_zip = Customer.objects.filter(zip_code=logged_in_employee_zip_code)
-        
+        if day is not None:
+            customer_in_zip = Customer.objects.filter(Q(zip_code=logged_in_employee_zip_code) & Q(weekly_pickup=day) or Q(one_time_pickup=day))
+        else:
+            customer_in_zip = Customer.objects.filter(zip_code=logged_in_employee_zip_code)
         context = {
             'logged_in_employee': logged_in_employee,
             'today': today,
@@ -50,7 +57,8 @@ def employee_index(request):
     weekday = today.strftime('%A')
     todays_date = datetime.now()
         
-    todays_customer = Customer.objects.filter(Q(zip_code=logged_in_employee_zip_code) & Q(weekly_pickup=weekday) or Q(one_time_pickup=weekday)).exclude(date_of_last_pickup=todays_date)
+    todays_customer = Customer.objects.filter(Q(zip_code=logged_in_employee_zip_code) & Q(weekly_pickup=weekday)
+            or Q(one_time_pickup=weekday)).exclude(date_of_last_pickup=todays_date).exclude(suspend_start__lte=today, suspend_end__gte=today) 
     context = {
             'logged_in_employee': logged_in_employee,
             'customer' : customer,
@@ -104,4 +112,4 @@ def confirm_pickup(request, customer_id):
 
         return render(request, 'employees/index.html')
     except ObjectDoesNotExist:
-        return HttpResponseRedirect(reverse('employees:index'))           
+        return HttpResponseRedirect(reverse('employees:index'))    
