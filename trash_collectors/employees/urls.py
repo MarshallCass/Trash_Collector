@@ -10,5 +10,4 @@ urlpatterns = [
     path('edit_profile/', views.edit_profile, name ="edit_profile"),
     path('confirm_pickup/<int:customer_id>/', views.confirm_pickup, name="confirm_pickup"),
     path('employee_index/', views.employee_index, name ="employee_index"),
-
 ]
