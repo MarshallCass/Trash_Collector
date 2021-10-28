@@ -1,11 +1,11 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.apps import apps
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from datetime import date
-
-from .models import Customer
+from customers.models import Customer
 
 @login_required
 def index(request):
@@ -91,3 +91,25 @@ def edit_profile(request):
             'logged_in_customer': logged_in_customer
         }
         return render(request, 'customers/edit_profile.html', context)
+@login_required
+def payments(request):
+    logged_in_user = request.user
+    logged_in_customer = Customer.objects.get(user=logged_in_user)
+       
+    context = {
+        'logged_in_customer': logged_in_customer,
+        }
+    return render(request, 'customers/payments.html', context)
+
+@login_required
+def confirm_payment(request, customer_id):
+    try:    
+        Customer = apps.get_model('customers.Customer')
+        customer = Customer.objects.get(id=customer_id)
+        customer.balance -= 20
+        customer.save()
+
+
+        return render(request, 'customers/payments.html')
+    except ObjectDoesNotExist:
+        return HttpResponseRedirect(reverse('customers:index'))    

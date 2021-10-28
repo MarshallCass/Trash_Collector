@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'customers',
-    'employees'
+    'employees',
+    'paypal.standard.ipn'
 ]
 
 MIDDLEWARE = [
