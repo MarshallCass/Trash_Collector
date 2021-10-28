@@ -10,6 +10,8 @@
           Address: {{ logged_in_customer.address }} {{logged_in_customer.zip_code }}<br />
           Current balance: $ {{ logged_in_customer.balance }}.00<br />
           <br />
+          <button> <a href="{% url 'customers:confirm_payment' customer.id %}" onClick="refreshPage()">Click To Confirm</a></button><br />
+
     <!-- Set up a container element for the button -->
     <div id="paypal-button-container"></div>
 
@@ -44,23 +46,31 @@
                     // Successful capture! For demo purposes:
                     console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
                     var transaction = orderData.purchase_units[0].payments.captures[0];
+                    alert('Transaction '+ transaction.status + ': ' + transaction.id);
                     
 
                     // Replace the above to show a success message within this page, e.g.
                     const element = document.getElementById('paypal-button-container');
                     element.innerHTML = '';
-                    element.innerHTML = '<h3>Thank you for your payment!</h3>';
-                    element.innerHTML =  transaction.status + ': ' + transaction.id;
+                    element.innerHTML = '<h3>Thank you for your payment!</h3>'; 
+                    
 
                 });
             }
         }).render('#paypal-button-container');
     </script>
-<button> <a href="{% url 'customers:confirm_payment' customer.id %}" onClick="refreshPage()">Confirm Payment</a></button><br />
-
+    
+       
+            
+           
     {% else %}
         <p>You are at the customer index, but you are not logged in.</p>
         <a href="{% url 'login' %}">Log In</a>
         <a href="{% url 'accounts:register' %}">Sign Up</a>
     {% endif %}
 {% endblock %}
+<script>
+    function refreshPage(){
+        window.location.reload();
+    } 
+    </script>

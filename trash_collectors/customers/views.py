@@ -93,11 +93,12 @@ def edit_profile(request):
         return render(request, 'customers/edit_profile.html', context)
 @login_required
 def payments(request):
+    customer = Customer.objects.all()
     logged_in_user = request.user
     logged_in_customer = Customer.objects.get(user=logged_in_user)
-       
     context = {
         'logged_in_customer': logged_in_customer,
+        'customer': customer
         }
     return render(request, 'customers/payments.html', context)
 
@@ -105,9 +106,9 @@ def payments(request):
 def confirm_payment(request, customer_id):
     try:    
         Customer = apps.get_model('customers.Customer')
-        customer = Customer.objects.get(id=customer_id)
-        customer.balance -= 20
-        customer.save()
+        customer_payment = Customer.objects.get(id = customer_id)
+        customer_payment.balance -= 20
+        customer_payment.save()
 
 
         return render(request, 'customers/payments.html')
