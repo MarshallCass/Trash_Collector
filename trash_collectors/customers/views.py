@@ -113,4 +113,4 @@ def confirm_payment(request, customer_id):
 
         return render(request, 'customers/payments.html')
     except ObjectDoesNotExist:
-        return HttpResponseRedirect(reverse('customers:index'))    
+        return HttpResponseRedirect(reverse('customers:payments'))    
